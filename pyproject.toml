@@ -1,0 +1,26 @@
+[build-system]
+requires      = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name            = "plex-unmonitorr"
+version         = "0.1.0"
+readme          = "README.md"
+requires-python = ">=3.13,<3.14"
+dependencies    = [
+    "brotli>=1.1.0",
+    "requests>=2.32.5"
+]
+
+[dependency-groups]
+dev = ["ruff>=0.12.11"]
+
+[tool.ruff]
+exclude        = [".venv", ".vscode", "venv"]
+line-length    = 120
+indent-width   = 4
+target-version = "py313"
+
+[tool.ruff.lint]
+ignore = ["E501"]
+select = ["E", "W", "F", "I", "UP", "B"]

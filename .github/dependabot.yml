@@ -10,7 +10,7 @@ updates:
     commit-message:
       prefix: "chore:"
     assignees:
-      - "frazzer951"
+      - "Frazzer951"
     groups:
       github-actions:
         patterns:
@@ -29,7 +29,7 @@ updates:
     commit-message:
       prefix: "chore:"
     assignees:
-      - "frazzer951"
+      - "Frazzer951"
     groups:
       docker:
         patterns:
@@ -48,7 +48,7 @@ updates:
     commit-message:
       prefix: "chore:"
     assignees:
-      - "frazzer951"
+      - "Frazzer951"
     groups:
       pip:
         patterns:

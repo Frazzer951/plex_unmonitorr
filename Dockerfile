@@ -15,7 +15,9 @@ RUN --mount=type=cache,target=/root/.cache/uv \
     pip install -U pip uv && \
     uv pip install --system .
 
-RUN chmod -R 777 /plex_unmonitorr && \
+RUN sed -i 's/\r$//' run.sh && \
+    chmod +x run.sh && \
+    chmod -R 777 /plex_unmonitorr && \
     chown -R 99:100 /plex_unmonitorr
 
 USER 99:100

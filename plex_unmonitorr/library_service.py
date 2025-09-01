@@ -26,6 +26,12 @@ class Media:
     episode_number: int | None = None
 
 
+@dataclass
+class WatchedMedia:
+    library: Library
+    watched: list[Media]
+
+
 def parse_libraries(data: dict, enabled_libraries: list[str]) -> list[Library]:
     libraries = []
     for item in data.get("MediaContainer", {}).get("Directory", []):
@@ -70,7 +76,7 @@ def parse_library_content(data: dict) -> list[Media]:
 
 def get_watched_content(
     plex_url: str, plex_token: str, enabled_libraries: list[str], days_back: int | None = None
-) -> dict[str, list[Media]]:
+) -> dict[str, list[WatchedMedia]]:
     """
     Get all watched content from specified Plex libraries.
 
@@ -102,8 +108,13 @@ def get_watched_content(
             content = plex.get_library_content(library.id, media_type)
             media = parse_library_content(content)
 
-            watched_media[library.title] = [
-                m for m in media if m.watched and (last_watched_cutoff is None or m.last_watched > last_watched_cutoff)
-            ]
+            watched_media[library.title] = WatchedMedia(
+                library=library,
+                watched=[
+                    m
+                    for m in media
+                    if m.watched and (last_watched_cutoff is None or m.last_watched > last_watched_cutoff)
+                ],
+            )
 
     return watched_media

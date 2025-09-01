@@ -1,6 +1,6 @@
 FROM python:3.13-slim
 
-WORKDIR /home/docker
+WORKDIR /plex_unmonitorr
 
 RUN apt-get update && \
     apt-get install -y git && \
@@ -9,13 +9,14 @@ RUN apt-get update && \
 COPY plex_unmonitorr/ ./plex_unmonitorr/
 COPY pyproject.toml .
 COPY run.sh .
+COPY config.example.yaml .
 
 RUN --mount=type=cache,target=/root/.cache/uv \
     pip install -U pip uv && \
     uv pip install --system .
 
-RUN chmod -R 777 /home/docker && \
-    chown -R 99:100 /home/docker
+RUN chmod -R 777 /plex_unmonitorr && \
+    chown -R 99:100 /plex_unmonitorr
 
 USER 99:100
 

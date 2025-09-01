@@ -1,0 +1,33 @@
+plex:
+  url: "http://localhost:32400"
+  token: "YOUR_PLEX_TOKEN_HERE"
+
+libraries:
+  "TV Shows": "sonarr_tv"
+  "Movies": "radarr_movies"
+  "Anime Shows": "sonarr_anime"
+  "Anime Movies": "radarr_anime"
+
+clients:
+  sonarr_tv:
+    type: sonarr
+    url: "http://localhost:8989"
+    api_key: "YOUR_SONARR_API_KEY_HERE"
+  sonarr_anime:
+    type: sonarr
+    url: "http://localhost:9090"
+    api_key: "YOUR_SONARR_ANIME_API_KEY_HERE"
+  radarr_movies:
+    type: radarr
+    url: "http://localhost:7878"
+    api_key: "YOUR_RADARR_API_KEY_HERE"
+  radarr_anime:
+    type: radarr
+    url: "http://localhost:7979"
+    api_key: "YOUR_RADARR_ANIME_API_KEY_HERE"
+
+settings:
+  # Number of days to look back for watched content (null = all time)
+  days_back: null
+  # Set to true to see what would be unmonitored without actually doing it
+  dry_run: true

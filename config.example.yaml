@@ -31,3 +31,7 @@ settings:
   days_back: null
   # Set to true to see what would be unmonitored without actually doing it
   dry_run: true
+  # List of TMDB IDs to ignore (movies)
+  ignored_tmdb_ids: []
+  # List of TVDB IDs to ignore (TV shows)
+  ignored_tvdb_ids: []

@@ -48,3 +48,13 @@ class Config:
     @property
     def dry_run(self) -> bool:
         return self._config["settings"]["dry_run"]
+
+    @property
+    def ignored_tmdb_ids(self) -> list[str]:
+        ids = self._config["settings"].get("ignored_tmdb_ids", [])
+        return [str(id_val) for id_val in ids]
+
+    @property
+    def ignored_tvdb_ids(self) -> list[str]:
+        ids = self._config["settings"].get("ignored_tvdb_ids", [])
+        return [str(id_val) for id_val in ids]

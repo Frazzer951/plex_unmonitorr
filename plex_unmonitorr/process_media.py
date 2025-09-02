@@ -20,8 +20,12 @@ def process_show_library(
     media: list[Media],
     client: SonarrClient,
     dry_run: bool,
+    ignored_tvdb_ids: list[str] = None,
 ) -> None:
     """Process a show library and unmonitor watched episodes in Sonarr."""
+    if ignored_tvdb_ids is None:
+        ignored_tvdb_ids = []
+
     # Group watched episodes by TVDB ID
     shows_by_tvdb = defaultdict(list)
 
@@ -45,6 +49,9 @@ def process_show_library(
                     break
 
         if tvdb_id:
+            if tvdb_id in ignored_tvdb_ids:
+                logger.debug(f"Skipping ignored TVDB ID: {tvdb_id} ({item.parent_title})")
+                continue
             shows_by_tvdb[tvdb_id].append(item)
         else:
             logger.warning(f"Could not extract TVDB ID for: {item.parent_title} - {item.title}")
@@ -114,8 +121,12 @@ def process_movie_library(
     media: list[Media],
     client: RadarrClient,
     dry_run: bool,
+    ignored_tmdb_ids: list[str] = None,
 ) -> None:
     """Process a movie library and unmonitor watched movies in Radarr."""
+    if ignored_tmdb_ids is None:
+        ignored_tmdb_ids = []
+
     movies_to_unmonitor = []
 
     for item in media:
@@ -130,6 +141,12 @@ def process_movie_library(
 
         if not tmdb_id:
             logger.warning(f"Could not extract TMDB ID for movie: {item.title}")
+            continue
+
+        # Extract numeric ID from tmdb:// format for comparison
+        tmdb_numeric_id = tmdb_id.split("tmdb://")[-1] if tmdb_id.startswith("tmdb://") else tmdb_id
+        if tmdb_numeric_id in ignored_tmdb_ids:
+            logger.debug(f"Skipping ignored TMDB ID: {tmdb_numeric_id} ({item.title})")
             continue
 
         try:
@@ -174,6 +191,8 @@ def process_media(
     clients: dict[str, SonarrClient],
     dry_run: bool,
     watched_media: dict[str, WatchedMedia],
+    ignored_tmdb_ids: list[str] = None,
+    ignored_tvdb_ids: list[str] = None,
 ):
     for library_title, items in watched_media.items():
         logger.debug(f"Library: {library_title}")
@@ -187,8 +206,8 @@ def process_media(
             continue
 
         if library.type == "show":
-            process_show_library(library_title, media, client, dry_run)
+            process_show_library(library_title, media, client, dry_run, ignored_tvdb_ids)
         elif library.type == "movie":
-            process_movie_library(library_title, media, client, dry_run)
+            process_movie_library(library_title, media, client, dry_run, ignored_tmdb_ids)
         else:
             raise ValueError(f"Unsupported library type: {library.type}")

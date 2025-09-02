@@ -32,7 +32,9 @@ def main():
     logger.debug("Getting played media from Plex...")
 
     watched_media = get_watched_content(config.plex_url, config.plex_token, config.libraries.keys(), config.days_back)
-    process_media(config.libraries, clients, config.dry_run, watched_media)
+    process_media(
+        config.libraries, clients, config.dry_run, watched_media, config.ignored_tmdb_ids, config.ignored_tvdb_ids
+    )
 
     for client in clients.values():
         client.close()
